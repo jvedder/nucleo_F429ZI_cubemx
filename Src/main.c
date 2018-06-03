@@ -40,6 +40,7 @@
 #include "stm32f4xx_hal.h"
 
 /* USER CODE BEGIN Includes */
+#include "string.h"
 
 /* USER CODE END Includes */
 
@@ -49,6 +50,10 @@ DMA_HandleTypeDef hdma_usart3_tx;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+//static HAL_StatusTypeDef status;
+static int counter = 0;
+static char uart_buffer[40];
+
 
 /* USER CODE END PV */
 
@@ -57,7 +62,6 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void MX_USART3_UART_Init(void);
-
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
 
@@ -106,6 +110,9 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  counter++;
+	  sprintf(uart_buffer, "count: %d\r\n", counter);
+	  HAL_UART_Transmit(&huart3, (uint8_t*) uart_buffer, strlen(uart_buffer), 1000);
 
   /* USER CODE END WHILE */
 
