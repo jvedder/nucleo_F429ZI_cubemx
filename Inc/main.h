@@ -53,6 +53,8 @@
 #define USER_Btn_GPIO_Port GPIOC
 #define MCO_Pin GPIO_PIN_0
 #define MCO_GPIO_Port GPIOH
+#define LD1_Pin GPIO_PIN_0
+#define LD1_GPIO_Port GPIOB
 #define LD3_Pin GPIO_PIN_14
 #define LD3_GPIO_Port GPIOB
 #define STLK_RX_Pin GPIO_PIN_8
@@ -74,8 +76,9 @@
 /* #define USE_FULL_ASSERT    1U */
 
 /* USER CODE BEGIN Private defines */
-#define RED_LED   GPIO_PIN_14
-#define BLUE_LED  GPIO_PIN_7
+#define GREEN_LED  GPIO_PIN_0
+#define RED_LED    GPIO_PIN_14
+#define BLUE_LED   GPIO_PIN_7
 
 
 void MAIN_SetDmaComplete( void );
