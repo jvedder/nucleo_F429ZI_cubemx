@@ -53,7 +53,7 @@ DMA_HandleTypeDef hdma_usart3_tx;
 //static HAL_StatusTypeDef status;
 static int counter = 0;
 static char uart_buffer[40];
-
+static volatile int dma_complete = 0;
 
 /* USER CODE END PV */
 
@@ -104,15 +104,26 @@ int main(void)
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
 
+  HAL_GPIO_WritePin(GPIOB, LD3_Pin, GPIO_PIN_SET);
+  HAL_UART_Transmit( &huart3, (uint8_t *) &"Booted.\r\n", 9, 1000);
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+  dma_complete = 1;
   while (1)
   {
-	  counter++;
-	  sprintf(uart_buffer, "count: %d\r\n", counter);
-	  HAL_UART_Transmit(&huart3, (uint8_t*) uart_buffer, strlen(uart_buffer), 1000);
+	  if (dma_complete == 1)
+	  {
+		  dma_complete = 0;
+		  HAL_UART_DMAStop( &huart3 );
+		  counter++;
+		  sprintf( uart_buffer, "count: %d\r\n", counter );
+		  HAL_UART_Transmit_DMA( &huart3, (uint8_t*) uart_buffer, strlen(uart_buffer) );
+	  }
 
   /* USER CODE END WHILE */
 
@@ -259,6 +270,16 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+void HAL_UART_TxCpltCallback (UART_HandleTypeDef *huart)
+{
+	dma_complete = 1;
+}
+
+void MAIN_SetDmaComplete( void )
+{
+	dma_complete = 1;
+}
 
 /* USER CODE END 4 */
 

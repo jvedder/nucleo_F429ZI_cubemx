@@ -74,6 +74,11 @@
 /* #define USE_FULL_ASSERT    1U */
 
 /* USER CODE BEGIN Private defines */
+#define RED_LED   GPIO_PIN_14
+#define BLUE_LED  GPIO_PIN_7
+
+
+void MAIN_SetDmaComplete( void );
 
 /* USER CODE END Private defines */
 
