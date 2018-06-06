@@ -62,6 +62,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
 static void MX_USART3_UART_Init(void);
+static void MX_NVIC_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -103,9 +104,12 @@ int main(void)
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_USART3_UART_Init();
+
+  /* Initialize interrupts */
+  MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 
-  HAL_GPIO_WritePin(GPIOB, GREEN_LED, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOB, GRN_LED_Pin, GPIO_PIN_SET);
   HAL_UART_Transmit( &huart3, (uint8_t *) &"Booted.\r\n", 9, 1000);
 
 
@@ -120,7 +124,6 @@ int main(void)
 	  if (dma_complete == 1)
 	  {
 		  dma_complete = 0;
-		  HAL_UART_DMAStop( &huart3 );
 		  counter++;
 		  sprintf( uart_buffer, "count: %d\r\n", counter );
 		  HAL_UART_Transmit_DMA( &huart3, (uint8_t*) uart_buffer, strlen(uart_buffer) );
@@ -199,6 +202,20 @@ void SystemClock_Config(void)
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
+/**
+  * @brief NVIC Configuration.
+  * @retval None
+  */
+static void MX_NVIC_Init(void)
+{
+  /* DMA1_Stream3_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 1, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
+  /* USART3_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(USART3_IRQn, 1, 0);
+  HAL_NVIC_EnableIRQ(USART3_IRQn);
+}
+
 /* USART3 init function */
 static void MX_USART3_UART_Init(void)
 {
@@ -226,11 +243,6 @@ static void MX_DMA_Init(void)
   /* DMA controller clock enable */
   __HAL_RCC_DMA1_CLK_ENABLE();
 
-  /* DMA interrupt init */
-  /* DMA1_Stream3_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
-
 }
 
 /** Configure pins as 
@@ -253,7 +265,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, LD1_Pin|LD3_Pin|LD2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, GRN_LED_Pin|RED_LED_Pin|BLUE_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : USER_Btn_Pin */
   GPIO_InitStruct.Pin = USER_Btn_Pin;
@@ -261,8 +273,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(USER_Btn_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LD1_Pin LD3_Pin LD2_Pin */
-  GPIO_InitStruct.Pin = LD1_Pin|LD3_Pin|LD2_Pin;
+  /*Configure GPIO pins : GRN_LED_Pin RED_LED_Pin BLUE_LED_Pin */
+  GPIO_InitStruct.Pin = GRN_LED_Pin|RED_LED_Pin|BLUE_LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -273,11 +285,6 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 void HAL_UART_TxCpltCallback (UART_HandleTypeDef *huart)
-{
-	dma_complete = 1;
-}
-
-void MAIN_SetDmaComplete( void )
 {
 	dma_complete = 1;
 }

@@ -53,10 +53,10 @@
 #define USER_Btn_GPIO_Port GPIOC
 #define MCO_Pin GPIO_PIN_0
 #define MCO_GPIO_Port GPIOH
-#define LD1_Pin GPIO_PIN_0
-#define LD1_GPIO_Port GPIOB
-#define LD3_Pin GPIO_PIN_14
-#define LD3_GPIO_Port GPIOB
+#define GRN_LED_Pin GPIO_PIN_0
+#define GRN_LED_GPIO_Port GPIOB
+#define RED_LED_Pin GPIO_PIN_14
+#define RED_LED_GPIO_Port GPIOB
 #define STLK_RX_Pin GPIO_PIN_8
 #define STLK_RX_GPIO_Port GPIOD
 #define STLK_TX_Pin GPIO_PIN_9
@@ -65,8 +65,8 @@
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
-#define LD2_Pin GPIO_PIN_7
-#define LD2_GPIO_Port GPIOB
+#define BLUE_LED_Pin GPIO_PIN_7
+#define BLUE_LED_GPIO_Port GPIOB
 
 /* ########################## Assert Selection ############################## */
 /**
@@ -76,12 +76,10 @@
 /* #define USE_FULL_ASSERT    1U */
 
 /* USER CODE BEGIN Private defines */
-#define GREEN_LED  GPIO_PIN_0
-#define RED_LED    GPIO_PIN_14
-#define BLUE_LED   GPIO_PIN_7
+//#define GREEN_LED  GPIO_PIN_0
+//#define RED_LED    GPIO_PIN_14
+//#define BLUE_LED   GPIO_PIN_7
 
-
-void MAIN_SetDmaComplete( void );
 
 /* USER CODE END Private defines */
 
